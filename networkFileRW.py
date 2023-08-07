@@ -1,15 +1,34 @@
 #!/usr/bin/env python3
 #networkFileRW.py
-#Pamela Brauda
-#Thursday, March 3, 2022
+#Fatima Bueno
+#July 31, 2023
 #Update routers and switches;
 #read equipment from a file, write updates & errors to file
 
 ##---->>>> Use a try/except clause to import the JSON module
+import json
+try:
+    routers = {"router1":"10.10.10.1", "router2":"20.20.20.1", "router3":"30.30.30.1"}
 
+    filename_r = 'equip_r.json'
+    with open(filename_r, 'w') as f:
+        json.dump(routers, f)
 
+    switches = {"switch1":"10.10.10.2", "switch2":"10.10.10.3", "switch3":"10.10.10.4",
+                "switch4":"10.10.10.5", "switch5":"20.20.20.2", "switch6":"20.20.20.3",
+                "switch7":"30.30.30.2", "switch8":"30.30.30.3", "switch9":"30.30.30.4"}
+    filename_s = 'equip_s.json'
+    with open(filename_s, 'w') as f:
+        json.dump(switches, f)
 
+except FileNotFoundError:
+    print('Sorry file does not exist')
+   
 ##---->>>> Create file constants for the file names; file constants can be reused
+EQUIP_R = 'equip_r.txt'
+EQUIP_S = 'equip_s.txt'
+UPDATED_EQUIP = 'updated.txt'
+INVAL_ADD = 'errors.txt'
 ##         There are 2 files to read this program: equip_r.txt and equip_s.txt
 ##         There are 2 files to write in this program: updated.txt and errors.txt
       
@@ -60,19 +79,22 @@ def getValidIP(invalidIPCount, invalidIPAddresses):
 def main():
 
     ##---->>>> open files here
-
-
-
-    
     #dictionaries
     ##---->>>> read the routers and addresses into the router dictionary
-
-    routers = {}
+    filename_r = 'equip_r.json'
+    with open(filename_r) as f:
+        routers = json.load(f)
+        
+##    routers = {}
+    
 
 
     ##---->>>> read the switches and addresses into the switches dictionary
+    filename_s = 'equip_s.json'
+    with open(filename_s) as f:
+        switches = json.load(f)
 
-    switches = {}
+##    switches = {}
 
 
     #the updated dictionary holds the device name and new ip address
@@ -131,21 +153,21 @@ def main():
     print("Number of devices updated:", devicesUpdatedCount)
 
     ##---->>>> write the updated equipment dictionary to a file
-
-    
-    print("Updated equipment written to file 'updated.txt'")
+    with open(UPDATED_EQUIP, 'w') as f:
+        f.write(str(updated))
+       
+ 
+    print('Updated equipment written to file updated.txt')
     print()
-    print("\nNumber of invalid addresses attempted:", invalidIPCount)
+    print('\nNumber of invalid addresses attempted: ', invalidIPCount)
 
     ##---->>>> write the list of invalid addresses to a file
-    
-
-    print("List of invalid addresses written to file 'errors.txt'")
+    with open(INVAL_ADD, 'w') as f:
+        f.write(str(invalidIPAddresses))
+    print("List of invalid addresses written to file errors.txt")
 
 #top-level scope check
 if __name__ == "__main__":
     main()
-
-
 
 
